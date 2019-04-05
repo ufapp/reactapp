@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+        Alert,
         Text, 
         View, 
         StyleSheet, 
@@ -18,6 +19,7 @@ import {
         from 'react-navigation';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import t from 'tcomb-form-native';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 
 // Form
@@ -75,7 +77,7 @@ class Homescreen extends React.Component {
         flex: 1,
         flexDirection: 'row',
       }}>
-      <View style={{ width: 150, height: 110, backgroundColor: 'blue', marginTop: 20, marginRight: 20,}}>
+      <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
         <Button 
           title="Schedule" 
           style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
@@ -87,7 +89,7 @@ class Homescreen extends React.Component {
         <Button 
           title="Calendar" 
           style={{width: 120, height: 120, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Calendar')}
+          onPress={() => this.props.navigation.navigate('Cal')}
           color={"#000"}
          />
         </View>
@@ -96,7 +98,7 @@ class Homescreen extends React.Component {
         flex: 1,
         flexDirection: 'row',
       }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'blue', marginTop: 20, marginRight: 20,}}>
+        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
         <Button 
           title="Payment" 
           style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
@@ -117,7 +119,7 @@ class Homescreen extends React.Component {
         flex: 1,
         flexDirection: 'row',
       }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'blue', marginTop: 20, marginRight: 20,}}>
+        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
         <Button 
           title="Student Guide" 
           style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
@@ -138,7 +140,7 @@ class Homescreen extends React.Component {
         flex: 1,
         flexDirection: 'row',
       }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'blue', marginTop: 20, marginRight: 20,}}>
+        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
         <Button 
           title="Emergency" 
           style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
@@ -395,19 +397,21 @@ class Schedule extends React.Component {
   }
 }
 
-class Calendar extends React.Component {
+class Cal extends React.Component {
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
+        <Calendar
+          // Collection of dates that have to be marked. Default = {}
+          markedDates={{
+            '2012-05-16': {selected: true, marked: true, selectedColor: 'blue'},
+            '2012-05-17': {marked: true},
+            '2012-05-18': {marked: true, dotColor: 'red', activeOpacity: 0},
+            '2012-05-19': {disabled: true, disableTouchEvent: true}
+          }}
         />
-        <Text style={styles.paragraph}>
-          Calendar
-        </Text>
-        <Button
-          title="Next screen"
+         <Button
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -419,15 +423,59 @@ class Payment extends React.Component {
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
         <Text style={styles.paragraph}>
           Payment
         </Text>
+        <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Printing Fees </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Pay" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text>Tuition</Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Pay" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Parking Ticket </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Pay" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
         <Button
-          title="Next screen"
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -435,19 +483,14 @@ class Payment extends React.Component {
   }
 }
 
+
 class Map extends React.Component {
+
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph}>
-          Map
-        </Text>
-        <Button
-          title="Next screen"
+         <Button
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -456,18 +499,94 @@ class Map extends React.Component {
 }
 
 class StudentGuide extends React.Component {
-  render() {
+    render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={styles.paragraph}>
+        <Text style={styles.paragraph1}>
           Student Guide
         </Text>
+        <Text style={styles.paragraph1}>
+          Settings
+        </Text>
+        <Text style={styles.paragraph2}>
+          Decal
+        </Text>
+        <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Red 3 </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Update" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+        <Text style={styles.paragraph2}>
+          Living
+        </Text>
+        <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Lexington Crossing </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginBottom: 30, marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Update" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+        <Text style={styles.paragraph2}>
+          UF App Recommendations
+        </Text>
+        <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Canvas </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Download" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> Rider </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Download" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
         <Button
-          title="Next screen"
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -479,15 +598,63 @@ class ClubGuide extends React.Component {
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph}>
-          ClubGuide
+        <Text style={styles.paragraph3}>
+          Club Guide
         </Text>
+        
+        <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="AeroGators" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="Solar Gators" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="Engineering Ambassadors" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="Cicerones" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="SubjuGator" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="American Institute of Aeronautics and Astronotics" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      
+
+      
         <Button
-          title="Next screen"
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -496,18 +663,92 @@ class ClubGuide extends React.Component {
 }
 
 class Emergency extends React.Component {
-  render() {
+    render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={styles.paragraph}>
+        <Text style={styles.paragraph1}>
           Emergency
         </Text>
+        <View style={{ width: 340, height:100, backgroundColor: 'lightblue' }}>
+        <Button 
+          title="EMERGENCY BUTTON" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => 
+            Alert.alert(
+                'Emergency Request',
+                'Would you like to request a police officer to come to your location?',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {text: 'Yes', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+              )
+              }
+          />
+      </View>
+        
+        <Text style={styles.paragraph2}>
+          Emergency Numbers
+        </Text>
+        <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> UFPD (352-392-1111) </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Call" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> CWC (352-392-1575) </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Call" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+      }}>
+      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
+      <Text> 911 </Text>
+        </View>
+        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
+        <Button 
+          title="Call" 
+          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
+          onPress={() => this.props.navigation.navigate('Homescreen')}
+          color={"#000"}
+         />
+        </View>
+      </View>
         <Button
-          title="Next screen"
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -523,11 +764,63 @@ class Notifications extends React.Component {
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={styles.paragraph}>
+        <Text style={styles.paragraph3}>
           Notifications
         </Text>
+        
+        <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="Pay Fine of $23.11" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="Hurricane Irma means no school" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="UF Hosting Shaq at O'Connell Center" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="Assignment due for CEN4721" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'powderblue' }}>
+        <Button 
+          title="You have a club event coming up" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      <View style={{ width: 340, height:80, backgroundColor: 'steelblue' }}>
+        <Button 
+          title="Welcome to the UF App" 
+          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
+          color={"#000"}
+          onPress={() => console.log("hi")}
+          />
+      </View>
+      
+
+      
         <Button
-          title="Next screen"
+          title="Done"
           onPress={() => this.props.navigation.navigate('Homescreen')}
         />
       </SafeAreaView>
@@ -566,8 +859,8 @@ export default createAppContainer(createStackNavigator({
   Schedule: {
     screen: Schedule,
   },
-  Calendar: {
-    screen: Calendar,
+  Cal: {
+    screen: Cal,
   },
   Payment: {
     screen: Payment,
@@ -662,5 +955,12 @@ const styles = StyleSheet.create({
     justifyContent: 'left',
     fontSize: 20,
     paddingBottom: 30,
+  },
+  paragraph3: {
+    flex: 1,
+    alignmentItems: 'left',
+    justifyContent: 'left',
+    fontSize: 40,
+    fontWeight: 'bold',
   },
 })

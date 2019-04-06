@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { 
+import {
         Alert,
         Text, 
         View, 
@@ -9,7 +9,9 @@ import {
         StatusBar, 
         TextInput,
         Picker,
-        Platform } 
+        Platform,
+        ScrollView,
+        TouchableOpacity } 
         from 'react-native';
 import { 
         createStackNavigator, 
@@ -81,7 +83,7 @@ class Homescreen extends React.Component {
         <Button 
           title="Schedule" 
           style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Schedule')}
+          onPress={() => this.props.navigation.navigate('ScheduleList')}
           color={"#000"}
          />
         </View>
@@ -377,7 +379,33 @@ class ToolkitDone extends React.Component {
   }
 }
 
-class Schedule extends React.Component {
+class ScheduleList extends React.Component {
+  createList = () => {
+      let children = []
+      //Inner loop to create children
+      for (let j = 0; j < 5; j++) {
+        children.push(
+           <View style={{width: 300, height: 100, borderWidth: 2, marginBottom: 10}}>
+            <Text>
+              Class #{j + 1}
+            </Text>
+            <Text>
+              Credits: 3
+            </Text>
+            <Text>
+              Room: XYZ 123
+            </Text>
+            <Text>
+              Days: M, W, F
+            </Text>
+            <Text>
+              Times: Period 4(10:40 - 11:30)
+            </Text>
+          </View>)
+      }
+    return children
+  }
+
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
@@ -385,13 +413,288 @@ class Schedule extends React.Component {
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={styles.paragraph}>
+        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
           Schedule
         </Text>
-        <Button
-          title="Next screen"
-          onPress={() => this.props.navigation.navigate('Homescreen')}
+
+        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="List"
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Day"
+              onPress={() => this.props.navigation.navigate('ScheduleDay')}
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Week"
+              onPress={() => this.props.navigation.navigate('ScheduleWeek')}
+            />
+          </View>
+        </View>
+
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+          {this.createList()}
+        </ScrollView>
+
+        <View style={{marginBottom: 0}}>
+          <Button 
+            title="Return to Home"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+}
+
+class ScheduleDay extends React.Component {
+    createTable = () => {
+        let table = [];
+        for (let i = 0; i < 11; i++){
+          if (i%2 == 0 && i != 0 && i != 4){
+            table.push(
+             <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+                <View style={{ flex: 0, width: 100, alignSelf: 'stretch' }}>
+                  <Text>
+                    Period {i}: 
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' }}>
+                  <Text>
+                    Class #{Math.floor(i/2)}, Building: XYZ 123
+                  </Text>
+                </View> 
+            </View>
+            );
+          }
+          else{
+            table.push(
+             <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+                <View style={{ flex: 0, width: 100, alignSelf: 'stretch' }}>
+                  <Text>
+                    Period {i}: 
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' }}>
+                </View> 
+            </View>
+            );
+          }
+        }
+        return table;
+    }
+
+  render() {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#ecf0f1"
         />
+        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
+          Schedule
+        </Text>
+
+           <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="List"
+              onPress={() => this.props.navigation.navigate('ScheduleList')}
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Day"
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Week"
+              onPress={() => this.props.navigation.navigate('ScheduleWeek')}
+            />
+          </View>
+        </View>
+
+        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 50}}>
+          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, textAlign: "center" }}>Monday</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, textAlign: "center" }}>Tuesday</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, textAlign: "center" }}>Wednesday</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, textAlign: "center" }}>Thursday</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, textAlign: "center" }}>Friday</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+          {this.createTable()}
+        </ScrollView>
+
+        <View style={{marginBottom: 0}}>
+          <Button 
+            title="Return to Home"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+}
+
+class ScheduleWeek extends React.Component {
+    createTable = () => {
+        let table = [];
+        for (let i = 0; i < 11; i++){
+          if (i%2 == 0 && i != 0 && i != 4){
+            table.push(
+             <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+                <View style={{ flex: 1, width: 100, alignSelf: 'stretch' , borderWidth: 1}}>
+                  <Text>
+                    Period {i}: 
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                  <Text style={{fontSize: 12}}>
+                    Class #{Math.floor(i/2)}
+                  </Text>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                  <Text style={{fontSize: 12}}>
+                    Class #{Math.floor(i/2)}
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                  <Text style={{fontSize: 12}}>
+                    Class #{Math.floor(i/2)}
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                </View>
+            </View>
+            );
+          }
+          else{
+            table.push(
+             <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+                <View style={{ flex: 1, width: 100, alignSelf: 'stretch',borderWidth: 1}}>
+                  <Text>
+                    Period {i}: 
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                  <Text style={{fontSize: 12}}>
+                    Class #{Math.floor(i/2)}
+                  </Text>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                </View>
+            </View>
+            );
+          }
+        }
+        return table;
+    }
+
+  render() {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#ecf0f1"
+        />
+        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
+          Schedule
+        </Text>
+
+               <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="List"
+              onPress={() => this.props.navigation.navigate('ScheduleList')}
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Day"
+              onPress={() => this.props.navigation.navigate('ScheduleDay')}
+            />
+          </View>
+          <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
+            <Button style={{fontSize: 20}}
+              title="Week"
+            />
+          </View>
+        </View>
+
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+             <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row'}}>
+                <View style={{ flex: 1, width: 0, alignSelf: 'stretch',borderWidth: 1 }}>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                  <Text style={{fontSize: 12}}>
+                    Monday
+                  </Text>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                  <Text style={{fontSize: 12}}>
+                    Tuesday
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch',borderWidth: 1 }}>
+                 <Text style={{fontSize: 12}}>
+                    Wednesday
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                 <Text style={{fontSize: 12}}>
+                    Thursday
+                  </Text>
+                </View> 
+                <View style={{ flex: 1, alignSelf: 'stretch' ,borderWidth: 1}}>
+                 <Text style={{fontSize: 12}}>
+                    Friday
+                  </Text>
+                </View> 
+            </View>
+          {this.createTable()}
+        </ScrollView>
+
+        <View style={{marginBottom: 0}}>
+          <Button 
+            title="Return to Home"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -856,8 +1159,14 @@ export default createAppContainer(createStackNavigator({
   ToolkitDone: {
     screen: ToolkitDone,
   },
-  Schedule: {
-    screen: Schedule,
+  ScheduleList: {
+    screen: ScheduleList,
+  },
+   ScheduleDay: {
+    screen: ScheduleDay,
+  },
+   ScheduleWeek: {
+    screen: ScheduleWeek,
   },
   Cal: {
     screen: Cal,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
         Alert,
+        Switch,
         Text, 
         View, 
         StyleSheet, 
@@ -11,7 +12,8 @@ import {
         Picker,
         Platform,
         ScrollView,
-        TouchableOpacity } 
+        TouchableOpacity,
+        Dimensions } 
         from 'react-native';
 import { 
         createStackNavigator, 
@@ -22,360 +24,939 @@ import {
 import { Ionicons as Icon } from '@expo/vector-icons';
 import t from 'tcomb-form-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-
-
-// Form
-const Form = t.form.Form;
-
-// Form model
-const User = t.struct({
-  email: t.String,
-  password: t.String,
-});
+import { Constants, MapView } from 'expo';
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 class Login extends React.Component {
-  render() {
-      return (
-        <SafeAreaView style={[styles.container1, { backgroundColor: '#ecf0f1' }]}>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="#ecf0f1"
-          />
-          <Text style={styles.paragraph}>
-            UF Login
-          </Text>
-          <Form ref={c => this.loginform = c} type={User} />
-          <Button
-            title="Login"
-            onPress={() => this.props.navigation.navigate('Homescreen')}
-          />
-        </SafeAreaView>
-      );
-    }
-}
+  constructor(props) {
+    super(props);
+    this.state = {
+      Email: '',
+      Password: '',
+    };
+  }
 
-class Homescreen extends React.Component {
+  CheckTextInput = () => {
+    //Handler for the Submit onPress
+    let email = this.state.Email;
+    let checkUfl = email.includes('@ufl.edu');
+    if (checkUfl === true) {
+      if (this.state.Password != '') {
+        //Check for the Email TextInput
+        this.props.navigation.navigate('Homescreen');
+      } else {
+        alert('Please Enter Password');
+      }
+    } else {
+      alert('Please Enter UFL Email');
+    }
+  };
+
   render() {
     return (
-      <SafeAreaView style={[styles.container]}>
-        <StatusBar
-          // barStyle="light-content"
-          // backgroundColor="#6a51ae"
+      <View style={loginStyle.MainContainer}>
+        <Text style={loginStyle.header}>UF Login</Text>
+        <TextInput
+          placeholder="UF Email"
+          onChangeText={Email => this.setState({ Email })}
+          underlineColorAndroid="transparent"
+          style={loginStyle.TextInput}
         />
-        <View style={{
-        flex: 1,
-        flexDirection: 'column',
-        margin: 30,
-      }}>
-      <View style={{ width: 340, height: 80, backgroundColor: 'steelblue' }}>
-        <Button 
-          title="New Semester Toolkit" 
-          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Toolkit')}
-          color={"#000"}
+        <TextInput
+          placeholder="Password"
+          onChangeText={Password => this.setState({ Password })}
+          underlineColorAndroid="transparent"
+          style={loginStyle.TextInput}
+          secureTextEntry={true}
+        />
+        <View style={{ marginTop: 15 }}>
+          <Button
+            title="Submit"
+            onPress={this.CheckTextInput}
+            color="#606070"
           />
-      </View>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
-        <Button 
-          title="Schedule" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('ScheduleList')}
-          color={"#000"}
-         />
-        </View>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Calendar" 
-          style={{width: 120, height: 120, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Cal')}
-          color={"#000"}
-         />
         </View>
       </View>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
-        <Button 
-          title="Payment" 
-          style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Payment')}
-          color={"#000"}
-         />
-        </View>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Map" 
-          style={{width: 80, height: 80, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Map')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
-        <Button 
-          title="Student Guide" 
-          style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('StudentGuide')}
-          color={"#000"}
-         />
-        </View>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Club Guide" 
-          style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('ClubGuide')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginRight: 20,}}>
-        <Button 
-          title="Emergency" 
-          style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Emergency')}
-          color={"#000"}
-         />
-        </View>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Notifications" 
-          style={{width: 50, height: 50, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Notifications')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-      </View>
-      </SafeAreaView>
     );
   }
 }
+
+const loginStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    margin: 35,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 25
+    },
+
+  TextInput: {
+    width: '100%',
+    height: 40,
+    paddingLeft: 5,
+    borderWidth: 1,
+    marginTop: 15,
+    borderColor: 'blue',
+    borderRadius: 20 ,
+  },
+});
+
+class Homescreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    global.num1 = 0;
+    global.num2 = 0;
+    global.num3 = 0;
+    global.decal = 'No Decal'
+  }
+
+  componentDidMount() {
+    global.num1 = Math.floor((Math.random() * 100) + 1);
+    global.num2 = Math.floor((Math.random() * 100) + 1);
+    global.num3 = Math.floor((Math.random() * 100) + 1);
+  }
+
+  render() {
+    return (
+      <View style={homescreenStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Logout"
+              onPress={() => this.props.navigation.navigate('Login')}
+            />
+          </Row>
+          <Row size={15} 
+          style={homescreenStyle.button}>
+            <Button 
+              title="New Semester Toolkit" 
+              onPress={() => this.props.navigation.navigate('Toolkit')}
+              color={"#fff"}
+            />
+          </Row>
+          <Row size={79}>
+            <Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Schedule" 
+                  onPress={() => this.props.navigation.navigate('ScheduleList')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Calendar" 
+                  onPress={() => this.props.navigation.navigate('Cal')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Payment" 
+                  onPress={() => this.props.navigation.navigate('Payment')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Map" 
+                  onPress={() => this.props.navigation.navigate('ParkingMap')}
+                  color={"#fff"}
+                />
+              </Col>
+            </Col>
+            <Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Student Guide" 
+                  onPress={() => this.props.navigation.navigate('StudentGuide')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Club Guide" 
+                  onPress={() => this.props.navigation.navigate('ClubGuide')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Emergency" 
+                  onPress={() => this.props.navigation.navigate('Emergency')}
+                  color={"#fff"}
+                />
+              </Col>
+              <Col style={homescreenStyle.button}>
+                <Button 
+                  title="Notifications" 
+                  onPress={() => this.props.navigation.navigate('Notifications')}
+                  color={"#fff"}
+                />
+              </Col>
+            </Col>
+          </Row>
+        </Grid>
+      </View>
+    )
+  }
+}
+
+const homescreenStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    margin: 20,
+  },
+  button: {
+    backgroundColor: 'blue',
+    margin: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    justifyItems: 'center',
+  }
+});
+
+
+class ParkingMap extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+    red_decal: true,
+    blue_decal: true,
+    green_decal: true,
+    orange_decal: true,
+    yellow_decal: true,
+    mapRegion: {
+      latitude: 29.648215,
+      longitude: -82.343711,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }
+    };
+
+    // This binding is necessary to make `this` work in the callback
+    this.switchClickedRED = this.switchClickedRED.bind(this);
+    this.switchClickedBLUE = this.switchClickedBLUE.bind(this);
+    this.switchClickedGREEN = this.switchClickedGREEN.bind(this);
+    this.switchClickedORANGE = this.switchClickedORANGE.bind(this);
+    this.switchClickedYELLOW = this.switchClickedYELLOW.bind(this);
+  }
+
+  _handleMapRegionChange = mapRegion => {
+    this.setState({ mapRegion });
+  };
+
+ switchClickedRED() {
+    this.setState(state => ({
+      red_decal: !state.red_decal
+    }));
+    this.forceUpdate();
+  }
+   switchClickedBLUE() {
+    this.setState(state => ({
+      blue_decal: !state.blue_decal
+    }));
+    this.forceUpdate();
+  }
+   switchClickedGREEN() {
+    this.setState(state => ({
+      green_decal: !state.green_decal
+    }));
+    this.forceUpdate();
+  }
+   switchClickedORANGE() {
+    this.setState(state => ({
+      orange_decal: !state.orange_decal
+    }));
+    this.forceUpdate();
+  }
+   switchClickedYELLOW() {
+    this.setState(state => ({
+      yellow_decal: !state.yellow_decal
+    }));
+    this.forceUpdate();
+  }
+  
+renderMarkers = () => {
+      let children = []
+      for (let j = 0; j < 5; j++) {
+        if (this.state.red_decal == true){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.648215,
+              longitude: -82.343711}}
+              title={"Red Decal"}
+              description={"Decal enforced from 7:00 AM to 4:30 PM, Mon-Fri"}
+          />
+       )
+        }
+        if (this.state.blue_decal){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.6481,
+              longitude: -82.342010}}
+              title={"Blue Decal"}
+              description={"Decal enforced from 7:00 AM to 4:30 PM, Mon-Fri"}
+          />
+       )
+        }
+        if (this.state.green_decal){
+        children.push(
+            <MapView.Marker
+              coordinate={
+                {latitude: 29.647211,
+              longitude: -82.345029}
+              }
+              title={"Green Decal"}
+              description={"Decal enforced from 7:00 AM to 4:30 PM, Mon-Fri"}
+          />
+       )
+        }
+        if (this.state.orange_decal){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.6348,
+              longitude: -82.342784}}
+              title={"Orange Decal"}
+              description={"Decal enforced from 7:00 AM to 4:30 PM, Mon-Fri"}
+          />
+       )
+        }
+        if (this.state.yellow_decal){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.63009,
+              longitude: -82.34742}}
+              title={"Yellow Decal"}
+              description={"Decal enforced from 7:00 AM to 4:30 PM, Mon-Fri"}
+          />
+       )
+        }
+      }
+    return children
+  }
+
+
+  render() {
+    return (
+      <View style={mapStyle.MainContainer}>
+      <View style={{height:100, marginTop: 30, marginBottom: -20}}>
+        <View style={{marginRight: 250}}>
+          <Button 
+            title="<Back"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+          <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 0}}>
+            <View style={{width: 100, height: 50, marginBottom: 0, marginLeft: 60}}>
+              <Button style={{fontSize: 20}}
+                title="Parking"
+                onPress={() => this.props.navigation.navigate('ParkingMap')}
+              />
+            </View>
+            <View style={{width: 100, height: 50, marginBottom: 0, marginRight: 0}}>
+              <Button style={{fontSize: 20}}
+                title="Schedule"
+                onPress={() => this.props.navigation.navigate('ScheduleMap')}
+              />
+            </View>
+          </View>
+        </View>
+
+      </View>
+      <View style={{height: 350, marginBottom: 20}}>
+        <MapView
+          style={mapStyle.map}
+          region={this.state.mapRegion}
+          onRegionChange={this._handleMapRegionChange}
+          >
+          {this.renderMarkers()}
+         </MapView>
+        </View>
+            <View style={{height: 100, width: 350}}>
+              <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Red Decal
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50}}
+                      value={this.state.red_decal}
+                      onValueChange={this.switchClickedRED}>
+                    </Switch>
+                  </View>
+                  <View style={{width: 80, marginLeft: 0}}>
+                    <Text>
+                      Yellow Decal
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50}}
+                      value={this.state.yellow_decal}
+                      onValueChange={this.switchClickedYELLOW}>
+                    </Switch>
+                  </View>
+              </View>
+              <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Blue Decal
+                    </Text>
+                  </View>
+                  <View style={{width: 50}}>
+                    <Switch style={{width: 50, marginLeft: -190}}
+                      value={this.state.blue_decal}
+                      onValueChange={this.switchClickedBLUE}>
+                    </Switch>
+                  </View>
+              </View>
+                <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Green Decal
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50, marginLeft: -190}}
+                      value={this.state.green_decal}
+                      onValueChange={this.switchClickedGREEN}>
+                    </Switch>
+                  </View>
+              </View>
+                <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Orange Decal
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50, marginLeft: -190}}
+                      value={this.state.orange_decal}
+                      onValueChange={this.switchClickedORANGE}>
+                    </Switch>
+                  </View>
+              </View>
+              </View>
+      </View>
+    );
+  }
+}
+
+class ScheduleMap extends Component {
+
+  constructor(prop) {
+    super(prop);
+    this.state = {
+    class1: true,
+    class2: true,
+    class3: true,
+    class4: true,
+    mapRegion: {
+      latitude: 29.648215,
+      longitude: -82.343711,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }
+    };
+
+    // This binding is necessary to make `this` work in the callback
+    this.switchClickedC1 = this.switchClickedC1.bind(this);
+    this.switchClickedC2 = this.switchClickedC2.bind(this);
+    this.switchClickedC3 = this.switchClickedC3.bind(this);
+    this.switchClickedC4 = this.switchClickedC4.bind(this);
+  }
+
+  _handleMapRegionChange = mapRegion => {
+    this.setState({ mapRegion });
+  };
+
+ switchClickedC1() {
+    this.setState(state => ({
+      class1: !state.class1
+    }));
+    this.forceUpdate();
+  }
+   switchClickedC2() {
+    this.setState(state => ({
+      class2: !state.class2
+    }));
+    this.forceUpdate();
+  }
+   switchClickedC3() {
+    this.setState(state => ({
+      class3: !state.class3
+    }));
+    this.forceUpdate();
+  }
+   switchClickedC4() {
+    this.setState(state => ({
+      class4: !state.class4
+    }));
+    this.forceUpdate();
+  }
+  
+renderMarkers = () => {
+      let children = []
+      for (let j = 0; j < 5; j++) {
+        if (this.state.class1){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.642215,
+              longitude: -82.343711}}
+              title={"Class #1, Building: XYZ 123"}
+              description={"M,W,F | Period 4 (10:40 AM - 11:30 AM)"}
+          />
+       )
+        }
+        if (this.state.class2){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.6451,
+              longitude: -82.340010}}
+              title={"Class #2, Building: XYZ 123"}
+              description={"T, Th | Period 5 (11:45 AM - 12:35 AM)"}
+          />
+       )
+        }
+        if (this.state.class3){
+        children.push(
+            <MapView.Marker
+              coordinate={
+                {latitude: 29.648211,
+              longitude: -82.345029}
+              }
+              title={"Class #3, Building: XYZ 123"}
+              description={"M,W,F | Period 5 (11:45 AM - 12:35 AM)"}
+          />
+       )
+        }
+        if (this.state.class4){
+        children.push(
+            <MapView.Marker
+              coordinate={{latitude: 29.6308,
+              longitude: -82.348784}}
+              title={"Class #4, Building: XYZ 123"}
+              description={"T, Th |  Period 4 (10:40 AM - 11:30 AM)"}
+          />
+       )
+        }
+      }
+    return children
+  }
+
+
+  render() {
+    return (
+      <View style={mapStyle.MainContainer}>
+      <View style={{height:100, marginTop: 30, marginBottom: -20}}>
+        <View style={{marginRight: 250}}>
+          <Button 
+            title="<Back"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+          <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 0}}>
+            <View style={{width: 100, height: 50, marginBottom: 0, marginLeft: 60}}>
+              <Button style={{fontSize: 20}}
+                title="Parking"
+                onPress={() => this.props.navigation.navigate('ParkingMap')}
+              />
+            </View>
+            <View style={{width: 100, height: 50, marginBottom: 0, marginRight: 0}}>
+              <Button style={{fontSize: 20}}
+                title="Schedule"
+                onPress={() => this.props.navigation.navigate('ScheduleMap')}
+              />
+            </View>
+          </View>
+        </View>
+
+      </View>
+      <View style={{height: 350, marginBottom: 20}}>
+        <MapView
+          style={mapStyle.map}
+          region={this.state.mapRegion}
+          onRegionChange={this._handleMapRegionChange}
+          >
+          {this.renderMarkers()}
+         </MapView>
+        </View>
+            <View style={{height: 100, width: 350}}>
+              <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Class #1, Building: XYZ 123
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50}}
+                      value={this.state.class1}
+                      onValueChange={this.switchClickedC1}>
+                    </Switch>
+                  </View>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Class #4, Building: XYZ 123
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50, marginLeft: 0}}
+                      value={this.state.class4}
+                      onValueChange={this.switchClickedC4}>
+                    </Switch>
+                  </View>
+              </View>
+              <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Class #2, Building: XYZ 123
+                    </Text>
+                  </View>
+                  <View style={{width: 50}}>
+                    <Switch style={{width: 50, marginLeft: -190}}
+                      value={this.state.class2}
+                      onValueChange={this.switchClickedC2}>
+                    </Switch>
+                  </View>
+              </View>
+                <View style={{flex: 0, flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                  <View style={{width: 80}}>
+                    <Text>
+                      Class #3, Building: XYZ 123
+                    </Text>
+                  </View>
+                  <View style={{width: 50, marginLeft: 0}}>
+                    <Switch style={{width: 50, marginLeft: -190}}
+                      value={this.state.class3}
+                      onValueChange={this.switchClickedC3}>
+                    </Switch>
+                  </View>
+              </View>
+          </View>
+      </View>
+    );
+  }
+}
+
+const mapStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    marginBottom: 10,
+    marginLeft: 12,
+    height: 350,
+    width: 350
+  },
+  map: {
+    alignSelf: 'stretch',
+    flex: 1,
+  }
+});
 
 class Toolkit extends React.Component {
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 1
-        </Text>
-        <Text style={styles.paragraph2}>
-          Click one or both calendars to import, then click next when you are done.
-        </Text>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 150, height: 110, backgroundColor: 'blue', marginTop: 20, marginRight: 20,}}>
-        <Button 
-          title="Import Apple Calendar" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Step2a')}
-          color={"#000"}
-         />
-        </View>
-        <View style={{ width: 150, height: 110, backgroundColor: 'powderblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Import Google Calendar" 
-          style={{width: 120, height: 120, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Step2a')}
-          color={"#000"}
-         />
-        </View>
+      <View style={toolStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={toolStyle.header}>Student Toolkit</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.title}>Step 1</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.text}>Click one or both calendars to import, then click Next when you are done.</Text>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={toolStyle.text}>Google Calendar</Text>
+            </Col>
+            <Col style={toolStyle.button}>
+              <Button 
+                  title="Import" 
+                  onPress={() => alert('Imported.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={toolStyle.text}>Apple Calendar</Text>
+            </Col>
+            <Col style={toolStyle.button}>
+              <Button 
+                  title="Import" 
+                  onPress={() => alert('Imported.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={6}>
+            <Button 
+              title="Next>"
+              onPress={() => this.props.navigation.navigate('Step2a')}
+            />
+          </Row>
+        </Grid>
       </View>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('Step2a')}
-        />
-      </SafeAreaView>
-    );
+    )
   }
 }
 
+const toolStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    margin: 35,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 30
+    },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 15
+    },
+    text: {
+    fontSize: 22,
+    marginBottom: 5,
+    justifyContent: 'center',
+    justifyItems: 'center',
+    },
+    button: {
+    backgroundColor: 'blue',
+    margin: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    justifyItems: 'center',
+  },
+});
+
 class Step2a extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {  }
+    global.address = ''
+  }
+
+  CheckTextInput = () => {
+    //Handler for the Submit onPress
+    let addr = global.address;
+    if (addr != '') {
+      this.props.navigation.navigate('Step2b');
+    } else {
+      alert('Please Enter Address');
+    }
+  };
+
+
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 2
-        </Text>
-        <Text style={styles.paragraph2}>
-          Enter your address and click Next to see which bus routes are best for you.
-        </Text>
-        <TextInput placeholder='Address'></TextInput>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('Step2b')}
-        />
-      </SafeAreaView>
-    );
+      <View style={toolStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={toolStyle.header}>Student Toolkit</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.title}>Step 2</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.text}>Enter your address and click Next to see which bus routes are best for you.</Text>
+          </Row>
+          <Row size={20}>
+            <TextInput
+              placeholder="Enter Address"
+              onChangeText={Email => global.address = Email}
+              underlineColorAndroid="transparent"
+              style={loginStyle.TextInput}
+            />
+          </Row>
+          <Row size={20}>
+          </Row>
+          <Row size={6}>
+            <Button 
+              title="Next>"
+              onPress={this.CheckTextInput}
+            />
+          </Row>
+        </Grid>
+      </View>
+    )
   }
 }
 
 class Step2b extends React.Component {
+
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 2
-        </Text>
-        <Text style={styles.paragraph2}>
-          These are the routes that are most relevant to you based on where you live.
-        </Text>
-        <Text style={styles.paragraph}> 9, 34, 35 </Text>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('Step3a')}
-        />
-      </SafeAreaView>
-    );
+      <View style={toolStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={toolStyle.header}>Student Toolkit</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.title}>Step 2</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.text}>Address Entered:</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.title}>{global.address}</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.text}>Routes recommended for you based on your address:</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.title}>{global.num1}, {global.num2}, {global.num3}</Text>
+          </Row>
+          <Row size={6}>
+            <Button 
+              title="Next>"
+              onPress={() => this.props.navigation.navigate('Step3a')}
+            />
+          </Row>
+        </Grid>
+      </View>
+    )
   }
 }
+
 
 class Step3a extends React.Component {
+
+    constructor(props) {
+    super(props);
+    this.state = { decal: 'No Decal' }
+  }
+
+
+  CheckSelection = () => {
+    //Handler for the Submit onPress
+    global.decal = this.state.decal;
+    this.props.navigation.navigate('ToolkitDone');
+  };
+
+  
+
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 3
-        </Text>
-        <Text style={styles.paragraph2}>
-          Input the parking decal you have to know which parking lots are available to you.
-        </Text>
-        <Picker>
-            <Picker.Item label = "Red 1" value = "red1" />
-            <Picker.Item label = "Red 3" value = "red3" />
-            <Picker.Item label = "Orange" value = "orange" />
-            <Picker.Item label = "Green" value = "green" />
-            <Picker.Item label = "Park and Ride" value = "pnr" />
-        </Picker>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('Step3b')}
-        />
-      </SafeAreaView>
-    );
+      <View style={toolStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={toolStyle.header}>Student Toolkit</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.title}>Step 3</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.text}>Select your Decal below so that the Map Module will show parking lots relevant to you.</Text>
+          </Row>
+          <Row size={20}>
+            <Picker
+              selectedValue={this.state.decal}
+              style={{height: 100, width: 310}}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({decal: itemValue})
+              }>
+              <Picker.Item label="Red 3" value="Red 3" />
+              <Picker.Item label="Red 1" value="Red 1" />
+              <Picker.Item label="Green" value="Green" />
+              <Picker.Item label="Orange" value="Orange" />
+              <Picker.Item label="Park and Ride" value="Park and Ride" />
+              <Picker.Item label="No Decal" value="No Decal" />
+            </Picker>
+          </Row>
+          <Row size={20}>
+          </Row>
+          <Row size={6}>
+            <Button 
+              title="Next>"
+              onPress={this.CheckSelection}
+            />
+          </Row>
+        </Grid>
+      </View>
+    )
   }
 }
 
-class Step3b extends React.Component {
-  render() {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 3
-        </Text>
-        <Text style={styles.paragraph2}>
-          Here are the lots available to you based on the parking decal you selected.
-        </Text>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('Step4')}
-        />
-      </SafeAreaView>
-    );
-  }
-}
-
-class Step4 extends React.Component {
-  render() {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Step 4
-        </Text>
-        <Text style={styles.paragraph2}>
-          Here are app recommendations for UF.
-        </Text>
-        <Button
-          title="Next"
-          onPress={() => this.props.navigation.navigate('ToolkitDone')}
-        />
-      </SafeAreaView>
-    );
-  }
-}
 
 class ToolkitDone extends React.Component {
+
+    constructor(props) {
+    super(props);
+    this.state = { decal: 'No Decal' }
+  }
+
+
+  CheckSelection = () => {
+    //Handler for the Submit onPress
+    global.decal = this.state.decal;
+    this.props.navigation.navigate('ToolkitDone');
+  };
+
+  
+
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Toolkit
-        </Text>
-        <Text style={styles.paragraph1}>
-          Done!
-        </Text>
-        <Text style={styles.paragraph2}>
-          That's all, if you need to redo or see this information again, click on 'Student Guide' on the homescreen. 
-
-          Click Done to go back to the homescreen.
-        </Text>
-        <Button
-          title="Done"
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-        />
-      </SafeAreaView>
-    );
+      <View style={toolStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={toolStyle.header}>Student Toolkit</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={toolStyle.title}>Done!</Text>
+          </Row>
+          <Row size={20}>
+            <Text style={toolStyle.text}>You completed all the steps. You can change your settings in Student Guide any time you would like. Click Done to go back to the homescreen.</Text>
+          </Row>
+          <Row size={20}>
+          </Row>
+          <Row size={20}>
+          </Row>
+          <Row size={6}>
+            <Button 
+              title="Done>"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+        </Grid>
+      </View>
+    )
   }
 }
 
@@ -409,15 +990,21 @@ class ScheduleList extends React.Component {
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
+        <View style={{marginRight: 250}}>
+          <Button 
+            title="<Back"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
+        <Text style={{fontSize: 40, marginBottom: 0, marginRight: 20}}>
           Schedule
         </Text>
 
-        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 0}}>
           <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
             <Button style={{fontSize: 20}}
               title="List"
@@ -437,16 +1024,9 @@ class ScheduleList extends React.Component {
           </View>
         </View>
 
-        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop:-100}}>
           {this.createList()}
         </ScrollView>
-
-        <View style={{marginBottom: 0}}>
-          <Button 
-            title="Return to Home"
-            onPress={() => this.props.navigation.navigate('Homescreen')}
-          />
-        </View>
       </SafeAreaView>
     );
   }
@@ -456,15 +1036,16 @@ class ScheduleDay extends React.Component {
     createTable = () => {
         let table = [];
         for (let i = 0; i < 11; i++){
-          if (i%2 == 0 && i != 0 && i != 4){
+          let x = (Math.random() * 10) + 1
+          if (x > 0 && x < 5){
             table.push(
              <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-                <View style={{ flex: 0, width: 100, alignSelf: 'stretch' }}>
+                <View style={{ flex: 0, width: 100, alignSelf: 'stretch', borderWidth: 1 }}>
                   <Text>
                     Period {i}: 
                   </Text>
-                </View> 
-                <View style={{ flex: 1, alignSelf: 'stretch' }}>
+                </View>
+                <View style={{ flex: 1, alignSelf: 'stretch', borderWidth: 1 }}>
                   <Text>
                     Class #{Math.floor(i/2)}, Building: XYZ 123
                   </Text>
@@ -475,12 +1056,12 @@ class ScheduleDay extends React.Component {
           else{
             table.push(
              <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-                <View style={{ flex: 0, width: 100, alignSelf: 'stretch' }}>
+                <View style={{ flex: 0, width: 100, alignSelf: 'stretch', borderWidth: 1}}>
                   <Text>
                     Period {i}: 
                   </Text>
                 </View> 
-                <View style={{ flex: 1, alignSelf: 'stretch' }}>
+                <View style={{ flex: 1, alignSelf: 'stretch', borderWidth: 1 }}>
                 </View> 
             </View>
             );
@@ -489,18 +1070,28 @@ class ScheduleDay extends React.Component {
         return table;
     }
 
+    updateTable() {
+      this.forceUpdate();
+    }
+
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
+        <View style={{marginRight: 250}}>
+          <Button 
+            title="<Back"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
+        <Text style={{fontSize: 40, marginBottom: 0, marginRight: 20}}>
           Schedule
         </Text>
 
-           <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+           <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 0}}>
           <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
             <Button style={{fontSize: 20}}
               title="List"
@@ -520,44 +1111,37 @@ class ScheduleDay extends React.Component {
           </View>
         </View>
 
-        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 50}}>
+        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -100, marginBottom: 30}}>
           <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.updateTable.bind(this)}>
               <Text style={{fontSize: 14, textAlign: "center" }}>Monday</Text>
             </TouchableOpacity>
           </View>
           <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.updateTable.bind(this)}>
               <Text style={{fontSize: 14, textAlign: "center" }}>Tuesday</Text>
             </TouchableOpacity>
           </View>
-          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
-            <TouchableOpacity>
+          <View style={{width: 80, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity onPress={this.updateTable.bind(this)}>
               <Text style={{fontSize: 14, textAlign: "center" }}>Wednesday</Text>
             </TouchableOpacity>
           </View>
           <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.updateTable.bind(this)}>
               <Text style={{fontSize: 14, textAlign: "center" }}>Thursday</Text>
             </TouchableOpacity>
           </View>
-          <View style={{width: 70, height: 80, marginBottom: 0, marginRight: 0}}>
-            <TouchableOpacity>
+          <View style={{width: 80, height: 80, marginBottom: 0, marginRight: 0}}>
+            <TouchableOpacity onPress={this.updateTable.bind(this)}>
               <Text style={{fontSize: 14, textAlign: "center" }}>Friday</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: -100}}>
           {this.createTable()}
         </ScrollView>
-
-        <View style={{marginBottom: 0}}>
-          <Button 
-            title="Return to Home"
-            onPress={() => this.props.navigation.navigate('Homescreen')}
-          />
-        </View>
       </SafeAreaView>
     );
   }
@@ -628,15 +1212,21 @@ class ScheduleWeek extends React.Component {
   render() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
+        <View style={{marginRight: 250}}>
+          <Button 
+            title="<Back"
+            onPress={() => this.props.navigation.navigate('Homescreen')}
+          />
+        </View>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#ecf0f1"
         />
-        <Text style={{fontSize: 40, marginBottom: 300, marginRight: 20}}>
+        <Text style={{fontSize: 40, marginBottom: 0, marginRight: 20}}>
           Schedule
         </Text>
 
-               <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: -250}}>
+        <View style={{flex: 1, flexDirection: 'row',justifyContent: 'space-between', marginTop: 0}}>
           <View style={{width: 100, height: 100, marginBottom: 0, marginRight: 0}}>
             <Button style={{fontSize: 20}}
               title="List"
@@ -656,7 +1246,7 @@ class ScheduleWeek extends React.Component {
           </View>
         </View>
 
-        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: 50}}>
+        <ScrollView style={{width: 300, height: 300, borderWidth: 0, marginTop: -100}}>
              <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row'}}>
                 <View style={{ flex: 1, width: 0, alignSelf: 'stretch',borderWidth: 1 }}>
                 </View> 
@@ -688,13 +1278,6 @@ class ScheduleWeek extends React.Component {
             </View>
           {this.createTable()}
         </ScrollView>
-
-        <View style={{marginBottom: 0}}>
-          <Button 
-            title="Return to Home"
-            onPress={() => this.props.navigation.navigate('Homescreen')}
-          />
-        </View>
       </SafeAreaView>
     );
   }
@@ -786,116 +1369,111 @@ class Payment extends React.Component {
   }
 }
 
-
-class Map extends React.Component {
-
+class StudentGuide extends React.Component {
   render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-         <Button
-          title="Done"
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-        />
-      </SafeAreaView>
-    );
+      <View style={studentStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={studentStyle.header}>Student Guide</Text>
+          </Row>
+          <Row size={10}>
+            <Text style={studentStyle.title}>Decal & Living</Text>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={studentStyle.text}>{global.address}</Text>
+            </Col>
+            <Col style={studentStyle.button}>
+              <Button 
+                  title="Update" 
+                  onPress={() => alert('Updated.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={studentStyle.text}>{global.decal}</Text>
+            </Col>
+            <Col style={studentStyle.button}>
+              <Button 
+                  title="Update" 
+                  onPress={() => alert('Updated.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={10}>
+            <Text style={studentStyle.title}>Recommendations</Text>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={studentStyle.text}>UF Rider</Text>
+            </Col>
+            <Col style={studentStyle.button}>
+              <Button 
+                  title="Download" 
+                  onPress={() => alert('Downloaded.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={studentStyle.text}>Canvas</Text>
+            </Col>
+            <Col style={studentStyle.button}>
+              <Button 
+                  title="Download" 
+                  onPress={() => alert('Downloaded.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+        </Grid>
+      </View>
+    )
   }
 }
 
-class StudentGuide extends React.Component {
-    render() {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Student Guide
-        </Text>
-        <Text style={styles.paragraph1}>
-          Settings
-        </Text>
-        <Text style={styles.paragraph2}>
-          Decal
-        </Text>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> Red 3 </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Update" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <Text style={styles.paragraph2}>
-          Living
-        </Text>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> Lexington Crossing </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginBottom: 30, marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Update" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <Text style={styles.paragraph2}>
-          UF App Recommendations
-        </Text>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> Canvas </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Download" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> Rider </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Download" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <Button
-          title="Done"
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-        />
-      </SafeAreaView>
-    );
-  }
-}
+const studentStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    margin: 35,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 30
+    },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 15
+    },
+    text: {
+    fontSize: 22,
+    marginBottom: 5,
+    justifyContent: 'center',
+    justifyItems: 'center',
+    },
+    button: {
+    backgroundColor: 'blue',
+    margin: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    justifyItems: 'center',
+  },
+});
+
+
 
 class ClubGuide extends React.Component {
   render() {
@@ -966,98 +1544,102 @@ class ClubGuide extends React.Component {
 }
 
 class Emergency extends React.Component {
-    render() {
+  render() {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: '#ecf0f1' }]}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#ecf0f1"
-        />
-        <Text style={styles.paragraph1}>
-          Emergency
-        </Text>
-        <View style={{ width: 340, height:100, backgroundColor: 'lightblue' }}>
-        <Button 
-          title="EMERGENCY BUTTON" 
-          style={{width: 140, height: 50, backgroundColor: 'powderblue'}} 
-          color={"#000"}
-          onPress={() => 
-            Alert.alert(
-                'Emergency Request',
-                'Would you like to request a police officer to come to your location?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {text: 'Yes', onPress: () => console.log('OK Pressed')},
-                ],
-                {cancelable: false},
-              )
-              }
-          />
+      <View style={emerStyle.MainContainer}>
+        <Grid>
+          <Row size={6}>
+            <Button 
+              title="<Back"
+              onPress={() => this.props.navigation.navigate('Homescreen')}
+            />
+          </Row>
+          <Row size={14}>
+            <Text style={emerStyle.header}>Emergency</Text>
+          </Row>
+          <Row size={20} style={emerStyle.button}>
+            <Button 
+                  title="EMERGENCY BUTTON" 
+                  onPress={() => alert('Emerged.')}
+                  color={"#fff"}
+              />
+          </Row>
+          <Row size={10}>
+          </Row>
+          <Row size={10}>
+            <Text style={emerStyle.title}>Numbers</Text>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={emerStyle.text}>352-292-1111 (UFPD)</Text>
+            </Col>
+            <Col style={emerStyle.button}>
+              <Button 
+                  title="Call" 
+                  onPress={() => alert('Called.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={emerStyle.text}>352-392-1575 (CWC)</Text>
+            </Col>
+            <Col style={emerStyle.button}>
+              <Button 
+                  title="Call" 
+                  onPress={() => alert('Called.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+          <Row size={20}>
+            <Col>
+              <Text style={emerStyle.text}>911</Text>
+            </Col>
+            <Col style={emerStyle.button}>
+              <Button 
+                  title="Call" 
+                  onPress={() => alert('Called.')}
+                  color={"#fff"}
+              />
+            </Col>
+          </Row>
+        </Grid>
       </View>
-        
-        <Text style={styles.paragraph2}>
-          Emergency Numbers
-        </Text>
-        <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> UFPD (352-392-1111) </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Call" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> CWC (352-392-1575) </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Call" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-      }}>
-      <View style={{ width: 100, height: 50, marginTop: 20, marginRight: 20,}}>
-      <Text> 911 </Text>
-        </View>
-        <View style={{ width: 100, height: 50, backgroundColor: 'steelblue', marginTop: 20, marginLeft: 20}}>
-        <Button 
-          title="Call" 
-          style={{width: 130, height: 130, backgroundColor: 'powderblue'}} 
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-          color={"#000"}
-         />
-        </View>
-      </View>
-        <Button
-          title="Done"
-          onPress={() => this.props.navigation.navigate('Homescreen')}
-        />
-      </SafeAreaView>
-    );
+    )
   }
 }
+
+const emerStyle = StyleSheet.create({
+  MainContainer: {
+    flex: 1,
+    margin: 35,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 20
+    },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 15
+    },
+    text: {
+    fontSize: 22,
+    marginBottom: 5,
+    justifyContent: 'center',
+    justifyItems: 'center',
+    },
+    button: {
+    backgroundColor: 'blue',
+    margin: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    justifyItems: 'center',
+  },
+});
 
 class Notifications extends React.Component {
   render() {
@@ -1150,12 +1732,6 @@ export default createAppContainer(createStackNavigator({
   Step3a: {
     screen: Step3a,
   },
-  Step3b: {
-    screen: Step3b,
-  },
-  Step4: {
-    screen: Step4,
-  },
   ToolkitDone: {
     screen: ToolkitDone,
   },
@@ -1174,8 +1750,11 @@ export default createAppContainer(createStackNavigator({
   Payment: {
     screen: Payment,
   },
-  Map: {
-    screen: Map,
+  ParkingMap: {
+    screen: ParkingMap,
+  },
+  ScheduleMap: {
+    screen: ScheduleMap,
   },
   StudentGuide: {
     screen: StudentGuide,
@@ -1193,76 +1772,20 @@ export default createAppContainer(createStackNavigator({
   headerMode: 'none',
 }));
 
-// Uncomment this area and comment out the other navigators to see a drawer example
-//
-// export default createAppContainer(createDrawerNavigator({
-//   Screen1: {
-//     screen: Screen1,
-//   },
-//   Screen2: {
-//     screen: Screen2,
-//   },
-// }));
-
-//Uncomment this area and comment out the other navigators to see a tab example
-
-// export default createAppContainer(createBottomTabNavigator({
-//   Screen1: {
-//     screen: Screen1,
-//     navigationOptions: {
-//       tabBarOnPress: ({ previousScene, scene, jumpToIndex }) => {
-//         // TODO: This doesn't handle the initial render because the second screen renders last. What to do?
-//         StatusBar.setBarStyle('light-content');
-//         isAndroid && StatusBar.setBackgroundColor('#6a51ae');
-//         jumpToIndex(scene.index);
-//       },
-//     },
-//   },
-//   Screen2: {
-//     screen: Screen2,
-//     navigationOptions: {
-//       tabBarOnPress: ({ previousScene, scene, jumpToIndex }) => {
-//         StatusBar.setBarStyle('dark-content');
-//         isAndroid && StatusBar.setBackgroundColor('#ecf0f1');
-//         jumpToIndex(scene.index);
-//       },
-//     },
-//   },
-// }));
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
-   container1: {
-    justifyContent: 'center',
-    marginTop: 50,
-    padding: 20,
-    backgroundColor: '#ffffff',
-  },
   paragraph: {
     fontSize: 40,
     alignmentItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
-    paddingBottom: 30,
-  },
-  paragraph1: {
-    flex: 1,
-    alignmentItems: 'left',
-    justifyContent: 'left',
-    fontSize: 40,
-    fontWeight: 'bold',
-    paddingBottom: 30,
-  },
-  paragraph2: {
-    flex: 1,
-    alignmentItems: 'left',
-    justifyContent: 'left',
-    fontSize: 20,
     paddingBottom: 30,
   },
   paragraph3: {
@@ -1273,3 +1796,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
+
+const mstyles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   backgroundColor: '#ecf0f1',
+  // },
+});
